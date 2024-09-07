@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Déclenche le workflow sur les commits dans la branche 'main'
+      - main
 
 jobs:
   build:
@@ -22,11 +22,11 @@ jobs:
         run: npm install
 
       - name: Build the project
-        run: npm run build  # Assure-toi que ton script de build est configuré dans package.json
+        run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public  # Le dossier où les fichiers construits sont générés, modifie selon ton projet
-
+          publish_dir: ./public  # Modifie si nécessaire
+          force_orphan: true  # Ajoute cette option pour forcer la création de la branche gh-pages
