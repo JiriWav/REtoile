@@ -3,9 +3,8 @@
 
   let canvas;
 
-  // Charger dynamiquement p5.js depuis le CDN et initialiser le canevas
   onMount(async () => {
-    // Charger p5.js depuis le CDN
+    // Charger dynamiquement p5.js depuis le CDN
     const p5 = await new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js";
@@ -16,29 +15,84 @@
 
     // Fonction de dessin p5.js
     const sketch = (p) => {
-      let x = 0;
+      let circles = [];
 
-      // Redimensionner le canevas pour qu'il fasse la taille de la fenêtre + 30 pixels
-      const resizeCanvasToWindow = () => {
-        p.resizeCanvas(window.innerWidth + 30, window.innerHeight + 30);
-      };
+      // Palette de couleurs de camaïeu crème
+      const colors = [
+        p.color(255, 248, 240), // crème très clair
+        p.color(253, 245, 230), // crème
+        p.color(250, 240, 210), // beige
+        p.color(245, 230, 190), // sable clair
+        p.color(240, 224, 175), // sable
+        p.color(230, 214, 160), // beige foncé
+        p.color(220, 204, 150), // crème foncé
+        p.color(210, 190, 130), // sable plus foncé
+      ];
 
+      // Classe pour gérer les cercles
+      class Circle {
+        constructor(x, y, r, color) {
+          this.x = x;
+          this.y = y;
+          this.r = r;
+          this.color = color;
+          this.xSpeed = p.random(-1, 1); // Vitesse aléatoire lente pour le déplacement horizontal
+          this.ySpeed = p.random(-1, 1); // Vitesse aléatoire lente pour le déplacement vertical
+        }
+
+        // Affichage du cercle
+        display() {
+          p.noStroke(); // Pas de bordure
+          p.fill(this.color); // Remplissage avec une couleur du camaïeu crème
+          p.ellipse(this.x, this.y, this.r); // Dessiner un cercle
+        }
+
+        // Mise à jour de la position avec déplacement aléatoire lent
+        move() {
+          this.x += this.xSpeed * 0.5; // Déplacement horizontal lent
+          this.y += this.ySpeed * 0.5; // Déplacement vertical lent
+
+          // Rebonds sur les bords du canevas
+          if (this.x < this.r / 2 || this.x > p.width - this.r / 2) {
+            this.xSpeed *= -1;
+          }
+          if (this.y < this.r / 2 || this.y > p.height - this.r / 2) {
+            this.ySpeed *= -1;
+          }
+        }
+      }
+
+      // Initialisation des cercles
       p.setup = () => {
-        p.createCanvas(window.innerWidth + 30, window.innerHeight + 30).parent(canvas); // Créer le canevas avec la taille de la fenêtre + 30px
-        window.addEventListener('resize', resizeCanvasToWindow); // Ajouter un écouteur d'événement pour redimensionner le canevas lorsque la fenêtre change de taille
+        p.createCanvas(window.innerWidth + 30, window.innerHeight + 30).parent(canvas);
+        for (let i = 0; i < 8; i++) {
+          let r = p.random(280, 450); // Taille aléatoire des cercles
+          let x = p.random(r, p.width - r);
+          let y = p.random(r, p.height - r);
+          let color = colors[i % colors.length]; // Couleur du camaïeu
+          circles.push(new Circle(x, y, r, color)); // Créer et ajouter un cercle à la liste
+        }
       };
 
+      // Dessiner et déplacer les cercles
       p.draw = () => {
-        p.background(220);
-        p.fill(255, 0, 0);
-        p.ellipse(x, p.height / 2, 50, 50); // Dessiner un cercle
-        x = (x + 1) % p.width; // Déplacer le cercle à droite en boucle
+        p.background(250, 240, 220); // Arrière-plan gris clair
+        circles.forEach((circle) => {
+          circle.move(); // Déplacer le cercle
+          circle.display(); // Afficher le cercle
+        });
       };
+
+      // Redimensionner le canevas lorsque la fenêtre est redimensionnée
+      window.addEventListener('resize', () => {
+        p.resizeCanvas(window.innerWidth + 30, window.innerHeight + 30);
+      });
     };
 
     new p5(sketch); // Initialiser p5.js avec le sketch
   });
 </script>
+
 
 
 <main>
@@ -94,7 +148,9 @@
     justify-content: center;
     position: relative;
     background-size: cover;
-    z-index: -10;
+    z-index: -14;
+    filter: blur(100px);
+
   }
 
   #canevas {
