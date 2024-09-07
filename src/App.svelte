@@ -1,44 +1,93 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import Counter from './lib/Counter.svelte'
+  import { onMount } from 'svelte';
+
+  let title = "Welcome to Our Beautiful Home Page";
+  let subtitle = "Explore the wonders of our website";
+  let features = [
+    { icon: '🚀', text: 'Fast and responsive' },
+    { icon: '🎨', text: 'Beautifully designed' },
+    { icon: '🛠️', text: 'Easy to customize' },
+  ];
+
+  let isLoaded = false;
+
+  onMount(() => {
+    setTimeout(() => {
+      isLoaded = true;
+    }, 500);
+  });
 </script>
 
-<main>
-  <div>
+<main class:loaded={isLoaded}>
+  <header>
+    <h1>{title}</h1>
+    <p>{subtitle}</p>
+  </header>
 
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte</h1>
+  <section class="features">
+    {#each features as feature}
+      <div class="feature">
+        <span class="icon">{feature.icon}</span>
+        <p>{feature.text}</p>
+      </div>
+    {/each}
+  </section>
 
-  <div class="card">
-    <Counter />
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
+  <footer>
+    <p>© {new Date().getFullYear()} Your Company Name. All rights reserved.</p>
+  </footer>
 </main>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
+  main {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
   }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
+
+  main.loaded {
+    opacity: 1;
+    transform: translateY(0);
   }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
+
+  header {
+    margin-bottom: 3rem;
   }
-  .read-the-docs {
-    color: #888;
+
+  h1 {
+    font-size: 2.5rem;
+    color: #333;
+  }
+
+  p {
+    font-size: 1.2rem;
+    color: #666;
+  }
+
+  .features {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 3rem;
+  }
+
+  .feature {
+    flex-basis: 30%;
+  }
+
+  .icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  footer {
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+    font-size: 0.9rem;
+    color: #999;
   }
 </style>
