@@ -17,16 +17,15 @@
     const sketch = (p) => {
       let circles = [];
 
-      // Palette de couleurs de camaïeu crème
+      // Palette de couleurs de camaïeu crème et caramel plus foncées
       const colors = [
-        p.color(255, 248, 240), // crème très clair
-        p.color(253, 245, 230), // crème
-        p.color(250, 240, 210), // beige
-        p.color(245, 230, 190), // sable clair
-        p.color(240, 224, 175), // sable
-        p.color(230, 214, 160), // beige foncé
-        p.color(220, 204, 150), // crème foncé
-        p.color(210, 190, 130), // sable plus foncé
+        p.color(205, 195, 170), // crème
+        p.color(200, 185, 160), // beige
+        p.color(195, 175, 145), // sable clair
+        p.color(185, 165, 135), // caramel clair
+        p.color(175, 155, 125), // caramel
+        p.color(165, 145, 115), // caramel foncé
+        p.color(155, 135, 105), // sable foncé
       ];
 
       // Classe pour gérer les cercles
@@ -43,21 +42,26 @@
         // Affichage du cercle
         display() {
           p.noStroke(); // Pas de bordure
-          p.fill(this.color); // Remplissage avec une couleur du camaïeu crème
+          p.fill(this.color); // Remplissage avec une couleur du camaïeu
           p.ellipse(this.x, this.y, this.r); // Dessiner un cercle
         }
 
         // Mise à jour de la position avec déplacement aléatoire lent
         move() {
-          this.x += this.xSpeed * 0.5; // Déplacement horizontal lent
-          this.y += this.ySpeed * 0.5; // Déplacement vertical lent
+          this.x += this.xSpeed; // Déplacement horizontal lent
+          this.y += this.ySpeed; // Déplacement vertical lent
 
-          // Rebonds sur les bords du canevas
-          if (this.x < this.r / 2 || this.x > p.width - this.r / 2) {
-            this.xSpeed *= -1;
+          // Réapparaître de l'autre côté du canevas lorsqu'on dépasse les bords (effet Snake)
+          if (this.x < -this.r) {
+            this.x = p.width + this.r;
+          } else if (this.x > p.width + this.r) {
+            this.x = -this.r;
           }
-          if (this.y < this.r / 2 || this.y > p.height - this.r / 2) {
-            this.ySpeed *= -1;
+
+          if (this.y < -this.r) {
+            this.y = p.height + this.r;
+          } else if (this.y > p.height + this.r) {
+            this.y = -this.r;
           }
         }
       }
@@ -65,8 +69,8 @@
       // Initialisation des cercles
       p.setup = () => {
         p.createCanvas(window.innerWidth + 30, window.innerHeight + 30).parent(canvas);
-        for (let i = 0; i < 8; i++) {
-          let r = p.random(280, 450); // Taille aléatoire des cercles
+        for (let i = 0; i <38; i++) {
+          let r = p.random(p.width/12, p.width/3); // Taille aléatoire des cercles
           let x = p.random(r, p.width - r);
           let y = p.random(r, p.height - r);
           let color = colors[i % colors.length]; // Couleur du camaïeu
@@ -76,7 +80,7 @@
 
       // Dessiner et déplacer les cercles
       p.draw = () => {
-        p.background(250, 240, 220); // Arrière-plan gris clair
+        p.background(240, 230, 210); // Arrière-plan beige pour mieux voir les cercles
         circles.forEach((circle) => {
           circle.move(); // Déplacer le cercle
           circle.display(); // Afficher le cercle
@@ -92,8 +96,6 @@
     new p5(sketch); // Initialiser p5.js avec le sketch
   });
 </script>
-
-
 
 <main>
   <header>
@@ -149,8 +151,6 @@
     position: relative;
     background-size: cover;
     z-index: -14;
-    filter: blur(100px);
-
   }
 
   #canevas {
@@ -160,6 +160,7 @@
     width: 100%;
     height: 100%;
     z-index: -15; /* Mettre le canevas en arrière-plan */
+    filter: blur(50px);
   }
 
   main::after {
@@ -209,8 +210,12 @@
   }
 
   h1 {
+    font-size: 86px;
+
     font-family: 'SUSE', sans-serif;
     color: #424242;
+    z-index: 2;
+
   }
 
   h2 {
