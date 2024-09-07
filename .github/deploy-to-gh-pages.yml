@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main    # Inclure main si tu utilises cette branche également
 
 jobs:
   build:
@@ -25,11 +25,12 @@ jobs:
         run: npm run build
 
       - name: Create .nojekyll file
-        run: echo "" > public/.nojekyll
+        run: echo "" > public/.nojekyll  # Désactive Jekyll pour GitHub Pages
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'  # Autorise le déploiement depuis master ou main
         with:
-          github_token: ${{ secrets.PAT_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-          force_orphan: true
+          force_orphan: true  # Force la création d'une nouvelle branche gh-pages sans historique
