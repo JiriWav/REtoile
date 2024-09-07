@@ -80,7 +80,7 @@
 
       // Dessiner et déplacer les cercles
       p.draw = () => {
-        p.background(240, 230, 210); // Arrière-plan beige pour mieux voir les cercles
+        p.background(210, 200, 180); // Arrière-plan beige pour mieux voir les cercles
         circles.forEach((circle) => {
           circle.move(); // Déplacer le cercle
           circle.display(); // Afficher le cercle
@@ -160,7 +160,7 @@
     width: 100%;
     height: 100%;
     z-index: -15; /* Mettre le canevas en arrière-plan */
-    filter: blur(50px);
+    filter: blur(45px);
   }
 
   main::after {
