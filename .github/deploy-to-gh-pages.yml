@@ -24,8 +24,8 @@ jobs:
       - name: Build the project
         run: npm run build
 
-      - name: Move build files
-        run: mv ./public ./docs  # Déplace le dossier public vers docs
+      - name: Create .nojekyll file
+        run: echo "" > docs/.nojekyll  # Créé dans le dossier docs pour désactiver Jekyll
 
       - name: Commit built files
         run: |
