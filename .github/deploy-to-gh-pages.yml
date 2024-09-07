@@ -29,7 +29,7 @@ jobs:
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4  # Mise à jour vers la version v4
-        if: github.ref == 'refs/heads/main'  # Déploie depuis la branche main
+        if: ${{ github.ref == 'refs/heads/main' }}
         with:
           personal_token: ${{ secrets.PAT_TOKEN }}  # Utilisation d'un Personal Access Token (PAT)
           publish_dir: ./public
