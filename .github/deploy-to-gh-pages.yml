@@ -1,9 +1,9 @@
-name: Deploy to GitHub Pages
+name: Build and Deploy from Main
 
 on:
   push:
     branches:
-      - main  # Utilise la branche main comme source
+      - main
 
 jobs:
   build:
@@ -24,15 +24,13 @@ jobs:
       - name: Build the project
         run: npm run build
 
-      - name: Create .nojekyll file
-        run: echo "" > public/.nojekyll  # Désactive Jekyll
+      - name: Move build files
+        run: mv ./public ./docs  # Déplace le dossier public vers docs
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4  # Mise à jour vers la version v4
-        if: ${{ github.ref == 'refs/heads/main' }}
-        with:
-          personal_token: ${{ secrets.PAT_TOKEN }}  # Utilisation d'un Personal Access Token (PAT)
-          publish_dir: ./public
-          force_orphan: true  # Force la création d'une nouvelle branche gh-pages
-          allow_empty_commit: true  # Autorise les commits vides
-  
+      - name: Commit built files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs
+          git commit -m "Deploy site to GitHub Pages"
+          git push
