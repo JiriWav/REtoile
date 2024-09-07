@@ -35,4 +35,4 @@ jobs:
           publish_dir: ./public
           force_orphan: true  # Force la création d'une nouvelle branche gh-pages
           allow_empty_commit: true  # Autorise les commits vides
- 
+  
