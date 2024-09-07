@@ -103,8 +103,8 @@
   </header>
 
   <div id="glass-intro">
-    <h2>Effet verre transparent</h2>
-    <p>Ceci est un exemple de texte à l'intérieur d'un rectangle avec un effet de verre transparent.</p>
+    <h2>Saison 1</h2>
+    <p>Défi : finir un projet par jour pendant 7 jours</p>
   </div>
 
   <!-- Ajout du canevas ici -->
