@@ -4,7 +4,6 @@
   let canvas;
 
   onMount(async () => {
-    // Charger dynamiquement p5.js depuis le CDN
     const p5 = await new Promise((resolve, reject) => {
       const script = document.createElement('script');
       script.src = "https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js";
@@ -13,45 +12,39 @@
       document.body.appendChild(script);
     });
 
-    // Fonction de dessin p5.js
     const sketch = (p) => {
       let circles = [];
 
-      // Palette de couleurs de camaïeu crème et caramel plus foncées
       const colors = [
-        p.color(205, 195, 170), // crème
-        p.color(200, 185, 160), // beige
-        p.color(195, 175, 145), // sable clair
-        p.color(185, 165, 135), // caramel clair
-        p.color(175, 155, 125), // caramel
-        p.color(165, 145, 115), // caramel foncé
-        p.color(155, 135, 105), // sable foncé
+        p.color(205, 195, 170), 
+        p.color(200, 185, 160), 
+        p.color(195, 175, 145), 
+        p.color(185, 165, 135), 
+        p.color(175, 155, 125), 
+        p.color(165, 145, 115), 
+        p.color(155, 135, 105)
       ];
 
-      // Classe pour gérer les cercles
       class Circle {
         constructor(x, y, r, color) {
           this.x = x;
           this.y = y;
           this.r = r;
           this.color = color;
-          this.xSpeed = p.random(-1, 1); // Vitesse aléatoire lente pour le déplacement horizontal
-          this.ySpeed = p.random(-1, 1); // Vitesse aléatoire lente pour le déplacement vertical
+          this.xSpeed = p.random(-1, 1);
+          this.ySpeed = p.random(-1, 1);
         }
 
-        // Affichage du cercle
         display() {
-          p.noStroke(); // Pas de bordure
-          p.fill(this.color); // Remplissage avec une couleur du camaïeu
-          p.ellipse(this.x, this.y, this.r); // Dessiner un cercle
+          p.noStroke();
+          p.fill(this.color);
+          p.ellipse(this.x, this.y, this.r);
         }
 
-        // Mise à jour de la position avec déplacement aléatoire lent
         move() {
-          this.x += this.xSpeed; // Déplacement horizontal lent
-          this.y += this.ySpeed; // Déplacement vertical lent
+          this.x += this.xSpeed;
+          this.y += this.ySpeed;
 
-          // Réapparaître de l'autre côté du canevas lorsqu'on dépasse les bords (effet Snake)
           if (this.x < -this.r) {
             this.x = p.width + this.r;
           } else if (this.x > p.width + this.r) {
@@ -66,34 +59,31 @@
         }
       }
 
-      // Initialisation des cercles
       p.setup = () => {
         p.createCanvas(window.innerWidth + 30, window.innerHeight + 30).parent(canvas);
-        for (let i = 0; i <38; i++) {
-          let r = p.random(p.width/12, p.width/3); // Taille aléatoire des cercles
+        for (let i = 0; i < 38; i++) {
+          let r = p.random(p.width / 12, p.width / 3);
           let x = p.random(r, p.width - r);
           let y = p.random(r, p.height - r);
-          let color = colors[i % colors.length]; // Couleur du camaïeu
-          circles.push(new Circle(x, y, r, color)); // Créer et ajouter un cercle à la liste
+          let color = colors[i % colors.length];
+          circles.push(new Circle(x, y, r, color));
         }
       };
 
-      // Dessiner et déplacer les cercles
       p.draw = () => {
-        p.background(210, 200, 180); // Arrière-plan beige pour mieux voir les cercles
+        p.background(210, 200, 180);
         circles.forEach((circle) => {
-          circle.move(); // Déplacer le cercle
-          circle.display(); // Afficher le cercle
+          circle.move();
+          circle.display();
         });
       };
 
-      // Redimensionner le canevas lorsque la fenêtre est redimensionnée
       window.addEventListener('resize', () => {
         p.resizeCanvas(window.innerWidth + 30, window.innerHeight + 30);
       });
     };
 
-    new p5(sketch); // Initialiser p5.js avec le sketch
+    new p5(sketch);
   });
 </script>
 
@@ -108,21 +98,21 @@
   </div>
 
   <!-- Ajout du canevas ici -->
-  <div id="canevas" bind:this={canvas}></div> <!-- Ce div contiendra le canevas p5.js -->
+  <div id="canevas" bind:this={canvas}></div>
 
   <div class="glass">
-    <a class="projet" href="#" >
+    <a class="projet" href="#">
       <h2>Jour 1</h2>
       <p>Boîtier à visser pour électronique.</p>
     </a>
   </div>
-   
+
   <div class="glass">
     <h2>Jour 2</h2>
     <p>Site web créé avec Svelte et hébergé sur Github Pages.</p>
   </div>
 
-   <div class="glass">
+  <div class="glass">
     <a href="#">
       <h2>Jour 3</h2>
       <p></p>
@@ -142,86 +132,69 @@
     margin: 0;
     padding: 0;
     width: 100vw;
-    height: 100vh;
     font-family: 'Expletus Sans', sans-serif;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     position: relative;
     background-size: cover;
     z-index: -14;
+    overflow-y: auto; /* Permettre le défilement */
   }
 
   #canevas {
-    position: absolute;
+    position: fixed; /* Fixe le canevas en arrière-plan */
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -15; /* Mettre le canevas en arrière-plan */
+    z-index: -15;
     filter: blur(45px);
   }
 
-  main::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    opacity: 0.75;
-    transform: rotate(180deg) scale(5);
-    filter: none;
-    z-index: -1;
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrer horizontalement les éléments dans main */
+    justify-content: flex-start; /* Aligner en haut */
+    min-height: 100vh; /* S'assurer que main occupe toute la hauteur de la page */
+    padding: 20px;
   }
 
   header {
-    position: relative;
     font-family: 'SUSE', sans-serif;
     z-index: 0;
+    margin-bottom: 40px; /* Espacement entre le header et le premier rectangle */
   }
 
-  nav a {
-    margin-right: 15px;
-    text-decoration: none;
-    color: #5a4b3b;
-    font-size: 18px;
-    border-radius: 8px;
-    padding: 10px;
-    background-color: #e7c8a4;
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
-    transition: transform 0.2s, box-shadow 0.2s;
-    font-family: 'SUSE', sans-serif;
-    z-index: 0;
+  .glass {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 20px 40px;
+    width: 500px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8.1px);
+    margin-bottom: 30px; /* Espacement entre les rectangles */
+    text-align: center; /* Centrer le texte */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
-  nav a:hover {
-    transform: scale(1.1);
-    box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.4);
-  }
-
-  section {
-    margin: 50px;
-    padding: 50px 20px;
-    filter: blur(5px);
-    border-radius: 10px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
-    background-image: url('https://www.transparenttextures.com/patterns/black-linen.png'), url('https://www.transparenttextures.com/patterns/asfalt-light.png');
-    z-index: 0;
+  .glass:hover {
+    background: rgba(255, 255, 255, 0.2);
   }
 
   h1 {
     font-size: 86px;
-
     font-family: 'SUSE', sans-serif;
     color: #424242;
     z-index: 2;
-
   }
 
   h2 {
     font-family: 'SUSE', sans-serif;
     color: #f2f2f2;
     z-index: 2;
+    text-align: center;
   }
 
   p {
@@ -229,44 +202,10 @@
     font-size: 16px;
     line-height: 1.5;
     color: #f2f2f2;
-  }
-
-  #glass-intro {
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    padding: 10px 30px;
-    width: 500px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(8.1px);
-    -webkit-backdrop-filter: blur(8.1px);
-    border: 1px solid rgba(255, 255, 255, 0.31);
-    margin-bottom: 30px;
-    z-index: 0;
-  }
-
-  .glass {
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    padding: 10px 30px;
-    width: 500px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(8.1px);
-    -webkit-backdrop-filter: blur(8.1px);
-    border: 1px solid rgba(255, 255, 255, 0.31);
-    margin-bottom: 30px;
-    z-index: 0;
-  }
-
-  .glass:hover {
-    background: rgba(255, 255, 255, 0.2);
+    text-align: center;
   }
 
   #glass-intro h2, #glass-intro p, .glass h2, .glass p {
     color: #110627;
-  }
-
-  hr {
-    border: 3px solid rgba(255, 255, 255, 0);
-    z-index: 0;
   }
 </style>
