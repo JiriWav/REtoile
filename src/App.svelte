@@ -17,8 +17,15 @@
     // Fonction de dessin p5.js
     const sketch = (p) => {
       let x = 0;
+
+      // Redimensionner le canevas pour qu'il fasse la taille de la fenêtre + 30 pixels
+      const resizeCanvasToWindow = () => {
+        p.resizeCanvas(window.innerWidth + 30, window.innerHeight + 30);
+      };
+
       p.setup = () => {
-        p.createCanvas(400, 400).parent(canvas); // Créer le canevas
+        p.createCanvas(window.innerWidth + 30, window.innerHeight + 30).parent(canvas); // Créer le canevas avec la taille de la fenêtre + 30px
+        window.addEventListener('resize', resizeCanvasToWindow); // Ajouter un écouteur d'événement pour redimensionner le canevas lorsque la fenêtre change de taille
       };
 
       p.draw = () => {
@@ -32,6 +39,7 @@
     new p5(sketch); // Initialiser p5.js avec le sketch
   });
 </script>
+
 
 <main>
   <header>
@@ -85,14 +93,17 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    background-color: #e5e5cc;
-    background-image: radial-gradient(circle, rgba(244, 209, 162, 0.5) 20%, transparent 40%),
-                      radial-gradient(circle at 60% 40%, rgba(244, 209, 162, 0.4) 15%, transparent 30%),
-                      radial-gradient(circle at 20% 20%, rgba(244, 209, 162, 0.6) 25%, transparent 30%),
-                      radial-gradient(circle at 20% 80%, rgba(228, 190, 140, 0.7) 20%, transparent 40%),
-                      radial-gradient(circle at 60% 100%, rgba(228, 190, 140, 0.5) 25%, transparent 45%);
     background-size: cover;
-    z-index: -1;
+    z-index: -10;
+  }
+
+  #canevas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -15; /* Mettre le canevas en arrière-plan */
   }
 
   main::after {
@@ -124,15 +135,12 @@
     transition: transform 0.2s, box-shadow 0.2s;
     font-family: 'SUSE', sans-serif;
     z-index: 0;
-
   }
 
   nav a:hover {
     transform: scale(1.1);
     box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.4);
-    z-index: 0; 
   }
-
 
   section {
     margin: 50px;
@@ -142,13 +150,11 @@
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
     background-image: url('https://www.transparenttextures.com/patterns/black-linen.png'), url('https://www.transparenttextures.com/patterns/asfalt-light.png');
     z-index: 0;
-
   }
 
   h1 {
     font-family: 'SUSE', sans-serif;
     color: #424242;
-
   }
 
   h2 {
@@ -162,7 +168,6 @@
     font-size: 16px;
     line-height: 1.5;
     color: #f2f2f2;
-    z-index: 0;
   }
 
   #glass-intro {
@@ -176,7 +181,6 @@
     border: 1px solid rgba(255, 255, 255, 0.31);
     margin-bottom: 30px;
     z-index: 0;
-
   }
 
   .glass {
@@ -190,7 +194,6 @@
     border: 1px solid rgba(255, 255, 255, 0.31);
     margin-bottom: 30px;
     z-index: 0;
-
   }
 
   .glass:hover {
@@ -200,13 +203,9 @@
   #glass-intro h2, #glass-intro p, .glass h2, .glass p {
     color: #110627;
   }
-  
+
   hr {
     border: 3px solid rgba(255, 255, 255, 0);
     z-index: 0;
-  }
-
-  #canevas {
-    z-index: -9999; 
   }
 </style>
